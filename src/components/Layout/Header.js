@@ -13,8 +13,8 @@ function Header() {
         About
       </Link>
       |
-      <Link style={linkStyle} to="/signup">
-        sign-up
+      <Link style={linkStyle} to="/signin">
+        Log In
       </Link>
     </header>
   );

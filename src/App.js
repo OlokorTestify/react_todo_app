@@ -3,7 +3,7 @@ import { Route, Redirect, Switch } from "react-router-dom";
 import About from "./components/Pages/about";
 import Header from "./components/Layout/Header";
 import Todos from "./components/Todos";
-import SignUp from "./components/Pages/SiignUp.jsx";
+import SignIn from "./components/Pages/SignIn.jsx";
 import AddTodo from "./components/AddTodo";
 import UpdateTodo from "./components/UpdateTodo";
 import "./App.css";
@@ -11,6 +11,7 @@ import axios from "axios";
 
 const App = () => {
   const [todos, setTodos] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [apiLoading, setApiLoading] = useState(false);
 
   const apiCall = async () => {
@@ -89,7 +90,14 @@ const App = () => {
               )}
             />
             <Route path="/about" component={About} />
-            <Route path="/signup" component={SignUp} />
+            <Route
+              path="/signin"
+              render={(props) => (
+                <>
+                  <SignIn {...props} setIsLoggedIn={setIsLoggedIn} />
+                </>
+              )}
+            />
             <Route
               path="/edit/:todo_id"
               render={(props) => (
