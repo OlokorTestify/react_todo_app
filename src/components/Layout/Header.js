@@ -12,6 +12,10 @@ function Header() {
       <Link style={linkStyle} to="/about">
         About
       </Link>
+      |
+      <Link style={linkStyle} to="/signup">
+        sign-up
+      </Link>
     </header>
   );
 }

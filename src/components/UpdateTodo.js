@@ -40,7 +40,6 @@ const UpdateTodo = (props) => {
           completed,
         },
       );
-      console.log(res.data);
       const newTodos = [...props.todos, res.data];
       props.setTodos(newTodos);
       setSubmitting(false);

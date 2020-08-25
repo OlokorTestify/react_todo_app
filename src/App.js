@@ -3,6 +3,7 @@ import { Route, Redirect, Switch } from "react-router-dom";
 import About from "./components/Pages/about";
 import Header from "./components/Layout/Header";
 import Todos from "./components/Todos";
+import SignUp from "./components/Pages/SiignUp.jsx";
 import AddTodo from "./components/AddTodo";
 import UpdateTodo from "./components/UpdateTodo";
 import "./App.css";
@@ -88,6 +89,7 @@ const App = () => {
               )}
             />
             <Route path="/about" component={About} />
+            <Route path="/signup" component={SignUp} />
             <Route
               path="/edit/:todo_id"
               render={(props) => (
