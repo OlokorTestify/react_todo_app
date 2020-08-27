@@ -1,20 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Header() {
+function Header(props) {
   return (
     <header style={headerStyle}>
       <h1>Todo list</h1>
-      <Link style={linkStyle} to="/">
-        Home
-      </Link>
+      {props.isLoggedIn ? (
+        <Link style={linkStyle} to="/">
+          Home
+        </Link>
+      ) : (
+        <Link style={linkStyle} to="/signin">
+          Log In
+        </Link>
+      )}
       |
       <Link style={linkStyle} to="/about">
         About
-      </Link>
-      |
-      <Link style={linkStyle} to="/signin">
-        Log In
       </Link>
     </header>
   );

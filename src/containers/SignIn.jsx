@@ -21,6 +21,7 @@ const SignIn = (props) => {
       );
       if (userData.data.email === email) {
         props.setIsLoggedIn(true);
+        localStorage.setItem("isLoggedIn", true);
         setMessage("login successful");
         setLoading(false);
         return;

@@ -7,18 +7,17 @@ const UpdateTodo = (props) => {
   const [existingTodo, setExistingTodo] = useState({});
   const [apiLoading, setApiLoading] = useState(false);
 
-  const apiCall = async () => {
-    const id = props.match.params.todo_id;
-    setApiLoading(true);
-    const res = await axios.get(
-      `https://jsonplaceholder.typicode.com/todos/${id}`,
-    );
-    setExistingTodo(res.data);
-    setApiLoading(false);
-    return;
-  };
-
   useEffect(() => {
+    const apiCall = async () => {
+      const id = props.match.params.todo_id;
+      setApiLoading(true);
+      const res = await axios.get(
+        `https://jsonplaceholder.typicode.com/todos/${id}`,
+      );
+      setExistingTodo(res.data);
+      setApiLoading(false);
+      return;
+    };
     apiCall();
   }, []);
 

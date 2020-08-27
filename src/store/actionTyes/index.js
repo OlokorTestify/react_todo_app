@@ -1,0 +1,11 @@
+export const CREATE_TODO_REQUEST = "CREATE_TODO_REQUEST";
+export const CREATE_TODO_SUCCESS = "CREATE_TODO_SUCCESS";
+export const CREATE_TODO_FAILURE = "CREATE_TODO_FAILURE";
+
+export const UPDATE_TODO = "UPDATE_TODO";
+export const GET_TODO = "GET_TODO";
+export const DELETE_TODO = "DELETE_TODO";
+export const GET_TODOS = "GET_TODOS";
+
+export const LOGIN_USER = "LOGIN_USER";
+export const LOGOUT_USER = "LOGOUT_USER";

@@ -3,17 +3,18 @@ import { Route, Redirect, Switch } from "react-router-dom";
 import About from "./components/Pages/about";
 import Header from "./components/Layout/Header";
 import Todos from "./components/Todos";
-import SignIn from "./components/Pages/SignIn.jsx";
+import SignIn from "./containers/SignIn.jsx";
 import AddTodo from "./components/AddTodo";
-import UpdateTodo from "./components/UpdateTodo";
+import UpdateTodo from "./containers/UpdateTodo";
 import "./App.css";
 import axios from "axios";
 
 const App = () => {
-  const [todos, setTodos] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [apiLoading, setApiLoading] = useState(false);
+  const auth = localStorage.getItem("isLoggedIn");
 
+  const [todos, setTodos] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(auth);
+  const [apiLoading, setApiLoading] = useState(false);
   const apiCall = async () => {
     try {
       const res = await axios.get(
@@ -72,23 +73,8 @@ const App = () => {
     <>
       <div className="App">
         <div className="container">
-          <Header />
+          <Header isLoggedIn={isLoggedIn} />
           <Switch>
-            <Route
-              exact
-              path="/"
-              render={(props) => (
-                <>
-                  <AddTodo {...props} AddTodo={addTodo} loading={apiLoading} />
-                  <Todos
-                    {...props}
-                    data={todos}
-                    markComplete={markComplete}
-                    delTodo={delTodo}
-                  />
-                </>
-              )}
-            />
             <Route path="/about" component={About} />
             <Route
               path="/signin"
@@ -98,15 +84,45 @@ const App = () => {
                 </>
               )}
             />
-            <Route
-              path="/edit/:todo_id"
-              render={(props) => (
-                <>
-                  <UpdateTodo {...props} todos={todos} setTodos={setTodos} />
-                </>
-              )}
-            />
-            <Redirect to="/" />
+            {isLoggedIn ? (
+              <>
+                <Route
+                  exact
+                  path="/"
+                  render={(props) => (
+                    <>
+                      <AddTodo
+                        {...props}
+                        AddTodo={addTodo}
+                        loading={apiLoading}
+                      />
+                      <Todos
+                        {...props}
+                        data={todos}
+                        markComplete={markComplete}
+                        delTodo={delTodo}
+                      />
+                    </>
+                  )}
+                />
+                <Route
+                  path="/edit/:todo_id"
+                  render={(props) => (
+                    <>
+                      <UpdateTodo
+                        {...props}
+                        todos={todos}
+                        setTodos={setTodos}
+                      />
+                    </>
+                  )}
+                />
+              </>
+            ) : (
+              <>
+                <Redirect to="/signin" />
+              </>
+            )}
           </Switch>
         </div>
       </div>
@@ -115,3 +131,16 @@ const App = () => {
 };
 
 export default App;
+
+const x = "a";
+
+switch (x) {
+  case "a":
+    console.log("this is a");
+    break;
+  case "b":
+    break;
+  default:
+    console.log("Not satisfied");
+    break;
+}
