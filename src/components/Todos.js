@@ -1,19 +1,27 @@
 import React from "react";
-import TodoItem from "./TodoItem";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import TodoItem from "./TodoItem";
 
-const Todos = ({ data, markComplete, delTodo, history }) => {
-  return data.map((todo) => (
+const Todos = (props) => {
+  return props.todos.map((todo) => (
     <TodoItem
       key={todo.id}
       data={todo}
-      markComplete={markComplete}
-      delTodo={delTodo}
-      history={history}
+      markComplete={props.markComplete}
+      delTodo={props.delTodo}
+      history={props.history}
     />
   ));
 };
 Todos.propTypes = {
   data: PropTypes.array.isRequired,
 };
-export default Todos;
+
+const mapStateToProps = (state) => {
+  return {
+    todos: state.todo.todos,
+  };
+};
+
+export default connect(mapStateToProps, null)(Todos);

@@ -15,7 +15,17 @@ function todoReducer(state = initialState, action) {
         todos: [...state.todos, action.todo],
         loading: action.loading,
       };
-      break;
+    case types.CREATE_TODO_REQUEST:
+      return {
+        ...state,
+        loading: action.loading,
+      };
+    case types.CREATE_TODO_FAILURE:
+      return {
+        ...state,
+        loading: action.loading,
+        error: action.error,
+      };
     case types.GET_TODO:
       return {
         ...state,
@@ -28,16 +38,27 @@ function todoReducer(state = initialState, action) {
         todos: action.todos,
       };
       break;
-    case types.UPDATE_TODO:
+    case types.UPDATE_TODO_SUCCESS:
       return {
         ...state,
         todos: [...state.todos, action.todo],
+        loading: action.loading,
       };
-      break;
+    case types.UPDATE_TODO_REQUEST:
+      return {
+        ...state,
+        loading: action.loading,
+      };
+    case types.UPDATE_TODO_FAILURE:
+      return {
+        ...state,
+        loading: action.loading,
+        error: action.error,
+      };
     case types.DELETE_TODO:
       return {
         ...state,
-        todos: [...state.todos.filter((todo) => todo.id !== id)],
+        todos: [...state.todos.filter((todo) => todo.id !== action.id)],
       };
       break;
     default:

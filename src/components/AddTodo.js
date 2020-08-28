@@ -1,5 +1,7 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { connect } from "react-redux";
+import { createTodo } from "../store/actions/todo";
 import * as Yup from "yup";
 
 const Button = (props) => {
@@ -12,33 +14,34 @@ const Button = (props) => {
 
 const AddTodo = (props) => {
   const newTodoSchema = Yup.object().shape({
-    new_todo: Yup.string()
+    title: Yup.string()
       .min(3, "Error STUPID")
       .max(6, "excessive")
       .required("please fill this field!!"),
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
-    props.AddTodo(values.new_todo);
+    props.createTodo(values); // This is dispatching the action
     setSubmitting(false);
   };
 
   return (
     <>
       <Formik
-        initialValues={{ new_todo: "" }}
+        initialValues={{ title: "" }}
         onSubmit={handleSubmit}
         validationSchema={newTodoSchema}
       >
         {({ isSubmitting }) => (
           <>
             <Form>
-              <Field type="text" name="new_todo" />
-              <ErrorMessage name="new_todo" component="div" />
+              <Field type="text" name="title" />
+              <ErrorMessage name="title" component="div" />
               <Button type={"submit"} disabled={isSubmitting}>
                 AddTodo
               </Button>
             </Form>
+            {props.loading ? <p>Loading...</p> : null}
           </>
         )}
       </Formik>
@@ -46,4 +49,14 @@ const AddTodo = (props) => {
   );
 };
 
-export default AddTodo;
+const mapStateToProps = (state) => {
+  return {
+    loading: state.todo.loading,
+  };
+};
+
+const mapDispatchToProps = {
+  createTodo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddTodo);
