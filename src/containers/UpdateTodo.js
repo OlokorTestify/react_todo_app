@@ -1,24 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import axios from "axios";
+import { connect } from "react-redux";
 import * as Yup from "yup";
+import { updateTodo, getTodo } from "../store/actions/todo";
 
 const UpdateTodo = (props) => {
-  const [existingTodo, setExistingTodo] = useState({});
-  const [apiLoading, setApiLoading] = useState(false);
-
   useEffect(() => {
-    const apiCall = async () => {
-      const id = props.match.params.todo_id;
-      setApiLoading(true);
-      const res = await axios.get(
-        `https://jsonplaceholder.typicode.com/todos/${id}`,
-      );
-      setExistingTodo(res.data);
-      setApiLoading(false);
-      return;
-    };
-    apiCall();
+    const id = props.match.params.todo_id;
+    props.getTodo(id);
   }, []);
 
   const todoSchema = Yup.object().shape({
@@ -30,24 +19,8 @@ const UpdateTodo = (props) => {
 
   const handleSubmit = async ({ title, completed }, { setSubmitting }) => {
     const id = props.match.params.todo_id;
-    try {
-      setApiLoading(true);
-      const res = await axios.put(
-        `https://jsonplaceholder.typicode.com/todos/${id}`,
-        {
-          title,
-          completed,
-        },
-      );
-      const newTodos = [...props.todos, res.data];
-      props.setTodos(newTodos);
-      setSubmitting(false);
-      setApiLoading(false);
-      props.history.push("/");
-    } catch (error) {
-      console.log(error);
-      setSubmitting(false);
-    }
+    props.updateTodo({ id, title, completed });
+    setSubmitting(false);
   };
 
   return (
@@ -55,8 +28,8 @@ const UpdateTodo = (props) => {
       <Formik
         enableReinitialize
         initialValues={{
-          title: existingTodo.title,
-          completed: existingTodo.completed,
+          title: props.todo.title,
+          completed: props.todo.completed,
         }}
         onSubmit={handleSubmit}
         validationSchema={todoSchema}
@@ -73,9 +46,21 @@ const UpdateTodo = (props) => {
           </>
         )}
       </Formik>
-      {apiLoading ? <div>Loading...</div> : null}
+      {props.loading ? <div>Loading...</div> : null}
     </>
   );
 };
 
-export default UpdateTodo;
+const mapStateToProps = (state) => {
+  return {
+    loading: state.todo.loading,
+    todo: state.todo.todo,
+  };
+};
+
+const mapDispatchToProps = {
+  updateTodo,
+  getTodo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateTodo);

@@ -1,5 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { delTodo, markComplete } from "../store/actions/todo";
+import { connect } from "react-redux";
 
 const TodoItem = (props) => {
   const getStyle = () => {
@@ -12,24 +13,23 @@ const TodoItem = (props) => {
   };
   const { id, title } = props.data;
   return (
-    <div
-      style={getStyle()}
-      onClick={() => {
-        props.history.push(`/edit/${id}`);
-      }}
-    >
+    <div style={getStyle()} key={props.key}>
       <p>
         <input type="checkbox" onChange={() => props.markComplete(id)} />{" "}
         {title}
         <button onClick={() => props.delTodo(id)} style={btnStyle}>
           x
         </button>
+        <button
+          onClick={() => {
+            props.history.push(`/edit/${id}`);
+          }}
+        >
+          EDIT
+        </button>
       </p>
     </div>
   );
-};
-TodoItem.protoType = {
-  todo: PropTypes.object.isRequired,
 };
 
 const btnStyle = {
@@ -42,4 +42,9 @@ const btnStyle = {
   float: "right",
 };
 
-export default TodoItem;
+const mapDispatchToProps = {
+  delTodo,
+  markComplete,
+};
+
+export default connect(null, mapDispatchToProps)(TodoItem);
