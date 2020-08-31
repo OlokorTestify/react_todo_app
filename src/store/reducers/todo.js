@@ -30,7 +30,7 @@ function todoReducer(state = initialState, action) {
     case types.GET_TODO_SUCCESS:
       return {
         ...state,
-        todos: [...state.todos, action.todo],
+        todo: action.todo,
         loading: action.loading,
       };
     case types.GET_TODO_REQUEST:

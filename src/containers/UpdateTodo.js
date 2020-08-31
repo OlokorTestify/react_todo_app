@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { updateTodo, getTodo } from "../store/actions/todo";
 
 const UpdateTodo = (props) => {
+  const dispatch = useDispatch();
+
+  const { todo } = useSelector((state) => state.todo);
+
   useEffect(() => {
     const id = props.match.params.todo_id;
-    props.getTodo(id);
+    dispatch(getTodo(id));
   }, []);
 
   const todoSchema = Yup.object().shape({
@@ -19,7 +23,7 @@ const UpdateTodo = (props) => {
 
   const handleSubmit = async ({ title, completed }, { setSubmitting }) => {
     const id = props.match.params.todo_id;
-    props.updateTodo({ id, title, completed });
+    dispatch(updateTodo({ id, title, completed }));
     setSubmitting(false);
   };
 
@@ -28,8 +32,8 @@ const UpdateTodo = (props) => {
       <Formik
         enableReinitialize
         initialValues={{
-          title: props.todo.title,
-          completed: props.todo.completed,
+          title: todo.title,
+          completed: todo.completed,
         }}
         onSubmit={handleSubmit}
         validationSchema={todoSchema}
@@ -51,16 +55,16 @@ const UpdateTodo = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    loading: state.todo.loading,
-    todo: state.todo.todo,
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     loading: state.todo.loading,
+//     todo: state.todo.todo,
+//   };
+// };
 
-const mapDispatchToProps = {
-  updateTodo,
-  getTodo,
-};
+// const mapDispatchToProps = {
+//   updateTodo,
+//   getTodo,
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateTodo);
+export default UpdateTodo;

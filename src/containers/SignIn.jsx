@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import { userLogin } from "../store/actions/auth";
+import { useDispatch, useSelector } from "react-redux";
 
 const SignIn = (props) => {
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const dispatch = useDispatch();
+  const userState = useSelector((state) => state.auth);
 
   const signInSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Required"),
@@ -14,27 +15,17 @@ const SignIn = (props) => {
 
   const handleSubmit = async ({ email, password }, { setSubmitting }) => {
     try {
-      setLoading(true);
-      const userData = await axios.post(
-        "https://jsonplaceholder.typicode.com/users",
-        { email, password },
-      );
-      if (userData.data.email === email) {
-        props.setIsLoggedIn(true);
-        localStorage.setItem("isLoggedIn", true);
-        setMessage("login successful");
-        setLoading(false);
-        return;
-      }
-    } catch (err) {
-      setLoading(false);
+      await dispatch(userLogin({ email, password }));
+      props.history.push(`/`);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
     <>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "test@gmail.com", password: "Srey67***" }}
         onSubmit={handleSubmit}
         validationSchema={signInSchema}
       >
@@ -44,7 +35,7 @@ const SignIn = (props) => {
               <Field type="email" name="email" placeholder="email" />
               <Field type="password" name="password" placeholder="password" />
               <ErrorMessage name="email" component="div" />
-              <ErrorMessage name="password" component="div" />
+              <ErrorMessage name="password" component="Sdiv" />
               <button type="submit" disabled={isSubmitting}>
                 Sign In
               </button>
@@ -52,8 +43,8 @@ const SignIn = (props) => {
           </>
         )}
       </Formik>
-      {loading ? <div>Loading...</div> : null}
-      <div>{message}</div>
+      {userState.loading ? <div>Loading...</div> : null}
+      <div>{userState.message}</div>
     </>
   );
 };

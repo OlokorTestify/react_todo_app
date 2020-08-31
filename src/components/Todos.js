@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import TodoItem from "./TodoItem";
 
 const Todos = (props) => {
+  console.log("hj", props.todos);
   return props.todos.map((todo) => {
     return <TodoItem key={todo.id} data={todo} history={props.history} />;
   });

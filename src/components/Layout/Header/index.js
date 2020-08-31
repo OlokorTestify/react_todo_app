@@ -1,14 +1,32 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-function Header(props) {
+import { logOut } from "../../../store/actions/auth";
+
+const Header = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { isLoggedIn } = useSelector((state) => state.auth);
   return (
     <header style={headerStyle}>
       <h1>Todo list</h1>
-      {props.isLoggedIn ? (
-        <Link style={linkStyle} to="/">
-          Home
-        </Link>
+      {isLoggedIn ? (
+        <>
+          <Link style={linkStyle} to="/">
+            Home
+          </Link>
+          |
+          <div
+            style={linkStyle}
+            onClick={() => {
+              dispatch(logOut());
+              history.push("/signin");
+            }}
+          >
+            Log Out
+          </div>
+        </>
       ) : (
         <Link style={linkStyle} to="/signin">
           Log In
@@ -20,7 +38,7 @@ function Header(props) {
       </Link>
     </header>
   );
-}
+};
 
 const headerStyle = {
   background: "#333",
